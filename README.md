@@ -1,70 +1,230 @@
-# Getting Started with Create React App
+# 🌿 CarbonSense – AI-Powered Carbon Footprint Analyzer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A production-ready, full-stack web application that uses a **trained Random Forest ML model** to predict and reduce carbon emissions for individuals and institutions.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+| Feature | Description |
+|---|---|
+| 🤖 **Real ML Model** | Random Forest Regressor (R² = 0.90) trained on 3,000 synthetic samples |
+| 🎯 **AI Recommendations** | Evaluates 12+ lifestyle scenarios via ML inference |
+| 📊 **Interactive Charts** | Pie/bar charts for emission breakdown (Chart.js) |
+| 🧑 **Personal Analyzer** | 3-step form with transport, energy, diet, and waste inputs |
+| 🏫 **Campus Tracker** | Institutional-scale aggregated emissions calculator |
+| 📄 **PDF Reports** | Download branded reports with emissions data |
+| 🎨 **Premium UI** | Dark-mode glassmorphism, Framer Motion animations, Inter font |
+| ⚡ **Real-time API** | Flask REST API with sub-second inference |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🏗️ Project Structure
 
-### `npm test`
+```
+carbon-footprint/
+├── src/                          # React frontend
+│   ├── components/
+│   │   ├── Navbar.js             # Fixed glassmorphism navbar
+│   │   ├── HeroSection.js        # Landing page with animations
+│   │   ├── PersonalAnalyzer.js   # 3-step personal form
+│   │   ├── CampusTracker.js      # Campus emissions form
+│   │   ├── ResultsDashboard.js   # ML results + charts + recs
+│   │   ├── EmissionChart.js      # Doughnut + bar charts
+│   │   ├── ProgressMeter.js      # SVG circular progress ring
+│   │   ├── RecommendationCard.js # AI scenario cards
+│   │   └── AboutPage.js          # Tech stack + emission factors
+│   ├── hooks/
+│   │   └── useApi.js             # Custom API hook
+│   ├── utils/
+│   │   └── formatters.js         # CO₂ formatters, constants
+│   ├── App.js                    # Main routing (state-based)
+│   ├── App.css
+│   └── index.css                 # Full design system
+├── backend/
+│   ├── app.py                    # Flask REST API (4 endpoints)
+│   ├── model/
+│   │   ├── train_model.py        # ML training script
+│   │   ├── carbon_model.pkl      # Trained model (generated)
+│   │   ├── scaler.pkl            # StandardScaler (generated)
+│   │   └── encoders.pkl          # LabelEncoders (generated)
+│   ├── data/
+│   │   ├── generate_dataset.py   # Synthetic dataset generator
+│   │   └── carbon_dataset.csv    # Training data (generated)
+│   └── requirements.txt
+├── package.json
+└── README.md
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🚀 Quick Start
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
+- **Node.js** 16+ and npm
+- **Python** 3.8+ and pip
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Step 1: Install Frontend Dependencies
 
-### `npm run eject`
+```bash
+cd carbon-footprint
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Step 2: Install Backend Dependencies
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+pip install flask flask-cors scikit-learn pandas numpy joblib
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### Step 3: Generate Dataset & Train the ML Model
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+# Generate synthetic training dataset (3,000 samples)
+$env:PYTHONUTF8=1; python backend/data/generate_dataset.py
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Train the Random Forest model
+$env:PYTHONUTF8=1; python backend/model/train_model.py
+```
 
-### Code Splitting
+Expected output:
+```
+[*] Dataset loaded: 3000 rows
+[*] Training Random Forest Regressor...
+[OK] Model Evaluation Results:
+   R2   : 0.9057
+   MAE  : 31.41 kg CO2
+   RMSE : 42.28 kg CO2
+[OK] Saved: carbon_model.pkl, scaler.pkl, encoders.pkl
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+### Step 4: Start the Flask Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Open a terminal and run:
 
-### Making a Progressive Web App
+```bash
+$env:PYTHONUTF8=1; python backend/app.py
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The API will start at **http://localhost:5000**
 
-### Advanced Configuration
+Verify: http://localhost:5000/api/health → `{"status": "ok", "model_loaded": true}`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### Step 5: Start the React Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Open a **second** terminal and run:
 
-### `npm run build` fails to minify
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The app will open at **http://localhost:3000**
+
+> If port 3000 is already in use: `$env:PORT=3001; npm start`
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/health` | Health check + model status |
+| `POST` | `/api/predict/personal` | Personal CO₂ prediction |
+| `POST` | `/api/predict/campus` | Campus aggregated prediction |
+| `POST` | `/api/recommend` | AI scenario optimization |
+
+### Example: Personal Prediction
+
+```bash
+curl -X POST http://localhost:5000/api/predict/personal \
+  -H "Content-Type: application/json" \
+  -d '{
+    "transport_type": "car_petrol",
+    "distance_km": 20,
+    "electricity_kwh": 150,
+    "diet_type": "meat_light",
+    "waste_kg": 20,
+    "flights_per_year": 2
+  }'
+```
+
+Response:
+```json
+{
+  "total_co2_monthly": 469.5,
+  "total_co2_annual": 5634.0,
+  "rating": "Average",
+  "breakdown": {
+    "transport": 126.0,
+    "electricity": 123.0,
+    "diet": 200.0,
+    "waste": 10.0,
+    "flights": 42.5
+  }
+}
+```
+
+---
+
+## 🤖 ML Model Details
+
+| Parameter | Value |
+|---|---|
+| Algorithm | Random Forest Regressor |
+| Trees (n_estimators) | 150 |
+| Max depth | 20 |
+| Training samples | 3,000 |
+| Test split | 20% |
+| R² Score | ~0.91 |
+| MAE | ~31 kg CO₂ |
+| Preprocessing | StandardScaler + LabelEncoder |
+
+**Feature Importances:**
+1. Diet type (33%)
+2. Travel distance (26%)
+3. Transport mode (21%)
+4. Electricity usage (14%)
+5. Flights (4%)
+6. Waste (2%)
+
+---
+
+## 🌍 Emission Factors
+
+Factors based on **IPCC AR6 (2022)**, **US EPA (2023)**, and **CEA India Grid (2023)**:
+
+| Source | Factor |
+|---|---|
+| Car (Petrol) | 0.21 kg CO₂/km |
+| Car (Electric) | 0.05 kg CO₂/km |
+| Bus | 0.04 kg CO₂/km |
+| Electricity (India) | 0.82 kg CO₂/kWh |
+| Domestic flight | 255 kg CO₂/flight |
+| Vegan diet | 50 kg CO₂/month |
+| Meat-heavy diet | 300 kg CO₂/month |
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**: React.js + Framer Motion + Chart.js + jsPDF + html2canvas
+
+**Backend**: Python Flask + scikit-learn + Pandas + NumPy + joblib
+
+**ML**: Random Forest Regressor with StandardScaler + LabelEncoder
+
+---
+
+## 📝 License
+
+MIT License — see [LICENSE](LICENSE) for details.
