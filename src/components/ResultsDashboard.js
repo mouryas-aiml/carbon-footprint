@@ -27,16 +27,16 @@ function AnimatedNumber({ value }) {
 }
 
 export default function ResultsDashboard({ result, onBack, onNavigate }) {
-  const [activeTab, setActiveTab]   = useState('Overview');
-  const [recommendations, setRecs]  = useState(null);
+  const [activeTab, setActiveTab] = useState('Overview');
+  const [recommendations, setRecs] = useState(null);
   const [loadingRecs, setLoadingRecs] = useState(false);
-  const [pdfLoading, setPdfLoading]   = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const dashboardRef = useRef(null);
 
   const { call } = useApi();
 
   const isPersonal = result.type === 'personal';
-  const rating     = getRating(result.total_co2_annual);
+  const rating = getRating(result.total_co2_annual);
 
   // ── Generate AI Recommendations ──────────────────────────────────
   const fetchRecommendations = useCallback(async () => {
@@ -46,7 +46,7 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
       const data = await call('/api/recommend', 'POST', result.inputs);
       setRecs(data);
       setActiveTab('Recommendations');
-    } catch {}
+    } catch { }
     finally { setLoadingRecs(false); }
   }, [call, isPersonal, recommendations, result.inputs]);
 
@@ -66,9 +66,9 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
       });
 
       const imgData = canvas.toDataURL('image/png');
-      const pdf     = new jsPDF('p', 'mm', 'a4');
-      const w       = pdf.internal.pageSize.getWidth();
-      const h       = (canvas.height * w) / canvas.width;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const w = pdf.internal.pageSize.getWidth();
+      const h = (canvas.height * w) / canvas.width;
 
       // Header
       pdf.setFillColor(10, 15, 30);
@@ -87,7 +87,7 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
         // Multi-page
         const pageH = pdf.internal.pageSize.getHeight() - 25;
         let remaining = h;
-        let first     = true;
+        let first = true;
 
         while (remaining > 0) {
           if (!first) pdf.addPage();
@@ -294,7 +294,7 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
                   <div style={{ marginTop: 20 }}>
                     {Object.entries(result.breakdown).map(([cat, val]) => {
                       const total = Object.values(result.breakdown).reduce((a, b) => a + b, 0);
-                      const pct   = total > 0 ? (val / total * 100) : 0;
+                      const pct = total > 0 ? (val / total * 100) : 0;
                       const icons = { transport: '🚗', electricity: '⚡', diet: '🥗', waste: '🗑️', flights: '✈️' };
                       return (
                         <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
@@ -306,7 +306,7 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
                             </div>
                             <div style={{ height: 5, background: 'rgba(255,255,255,0.05)', borderRadius: 3, overflow: 'hidden' }}>
                               <motion.div
-                                style={{ height: '100%', background: `${['#10b981','#3b82f6','#8b5cf6','#f59e0b','#ef4444'][Object.keys(result.breakdown).indexOf(cat)] || '#6b7280'}`, borderRadius: 3 }}
+                                style={{ height: '100%', background: `${['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'][Object.keys(result.breakdown).indexOf(cat)] || '#6b7280'}`, borderRadius: 3 }}
                                 initial={{ width: 0 }}
                                 animate={{ width: `${pct}%` }}
                                 transition={{ duration: 0.8, delay: 0.1 }}
