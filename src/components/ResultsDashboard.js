@@ -6,7 +6,7 @@ import { DoughnutChart, BarChart } from './EmissionChart';
 import ProgressMeter from './ProgressMeter';
 import RecommendationCard from './RecommendationCard';
 import { useApi } from '../hooks/useApi';
-import { getRating, TRANSPORT_OPTIONS, DIET_OPTIONS } from '../utils/formatters';
+import { getRating } from '../utils/formatters';
 
 const TABS = ['Overview', 'Breakdown', 'Recommendations'];
 
@@ -87,14 +87,12 @@ export default function ResultsDashboard({ result, onBack, onNavigate }) {
         // Multi-page
         const pageH = pdf.internal.pageSize.getHeight() - 25;
         let remaining = h;
-        let yOffset   = 0;
         let first     = true;
 
         while (remaining > 0) {
           if (!first) pdf.addPage();
           pdf.addImage(imgData, 'PNG', 0, first ? 22 : 5, w, h, undefined, 'FAST');
           remaining -= pageH;
-          yOffset   += pageH;
           first = false;
         }
       } else {
