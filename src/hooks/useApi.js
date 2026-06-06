@@ -3,7 +3,7 @@
 // Base URL is configurable via REACT_APP_API_URL env variable.
 import { useState, useCallback } from 'react';
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'https://carbon-footprint-api.onrender.com';
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://carbon-footprint-api-8phc.onrender.com';
 
 export function useApi() {
   const [loading, setLoading] = useState(false);
